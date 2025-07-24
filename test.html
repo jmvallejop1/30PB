@@ -189,14 +189,11 @@
     </form>
     <div class="card-container">
       <div class="card" id="card">
-        <div class="card-corner-icon" id="corner-icon"><img src="" alt="Icono Esquina" id="img-corner"></div>
+        <div class="card-corner-icon" id="corner-icon"><img src="assets/cacahuete.png" alt="Icono Esquina" id="img-corner"></div>
         <div class="card-section card-title" id="card-title">Título de la Carta</div>
-        <div class="card-section card-image"><img id="card-img" src="pablo.png" alt="Imagen Carta"></div>
+        <div class="card-section card-image"><img id="card-img" src="assets/Pablo1.JPG" alt="Imagen Carta"></div>
         <div class="card-section card-phrase" id="card-phrase">"Frase de la Carta"</div>
-        <div class="card-section card-instructions">
-          <div class="text" id="card-instructions">Instrucciones de la carta</div>
-          <div class="icon" id="instr-icon"><img src="" alt="Icono Instrucción" id="img-instruction"></div>
-        </div>
+        <div class="card-section card-instructions"><div class="text" id="card-instructions">Instrucciones de la carta</div><div class="icon" id="instr-icon"><img src="assets/cacahuete.png" alt="Icono Instrucción" id="img-instruction"></div></div>
       </div>
       <button class="export-btn" onclick="exportCard()">Exportar como PNG</button>
     </div>
@@ -218,39 +215,31 @@
         document.documentElement.style.setProperty('--color-accent', p.accent);
       });
     });
-    document.getElementById('title-input').addEventListener('input', e => {
-      document.getElementById('card-title').innerText = e.target.value || 'Título de la Carta';
-    });
-    document.getElementById('phrase-input').addEventListener('input', e => {
-      document.getElementById('card-phrase').innerText = e.target.value ? `"${e.target.value}"` : '"Frase de la Carta"';
-    });
-    document.getElementById('instructions-input').addEventListener('input', e => {
-      document.getElementById('card-instructions').innerText = e.target.value || 'Instrucciones de la carta';
-    });
-    document.getElementById('file-main').addEventListener('change', function(e) {
-      const file = e.target.files[0]; if (file) document.getElementById('card-img').src = URL.createObjectURL(file);
-    });
-    document.getElementById('toggle-corner').addEventListener('change', function() {
-      document.getElementById('corner-icon').style.display = this.checked ? 'block' : 'none';
-    });
-    document.getElementById('toggle-instruction').addEventListener('change', function() {
-      document.getElementById('instr-icon').style.display = this.checked ? 'flex' : 'none';
-    });
-    document.getElementById('file-corner').addEventListener('change', function(e) { const file = e.target.files[0]; if (file) document.getElementById('img-corner').src = URL.createObjectURL(file); });
-    document.getElementById('file-instruction').addEventListener('change', function(e) { const file = e.target.files[0]; if (file) document.getElementById('img-instruction').src = URL.createObjectURL(file); });
+    document.getElementById('title-input').addEventListener('input', e => { document.getElementById('card-title').innerText = e.target.value || 'Título de la Carta'; });
+    document.getElementById('phrase-input').addEventListener('input', e => { document.getElementById('card-phrase').innerText = e.target.value ? `"${e.target.value}"` : '"Frase de la Carta"'; });
+    document.getElementById('instructions-input').addEventListener('input', e => { document.getElementById('card-instructions').innerText = e.target.value || 'Instrucciones de la carta'; });
+    document.getElementById('file-main').addEventListener('change', e => { const file = e.target.files[0]; if(file) document.getElementById('card-img').src = URL.createObjectURL(file); });
+    document.getElementById('toggle-corner').addEventListener('change', e => { document.getElementById('corner-icon').style.display = e.target.checked ? 'block' : 'none'; });
+    document.getElementById('toggle-instruction').addEventListener('change', e => { document.getElementById('instr-icon').style.display = e.target.checked ? 'flex' : 'none'; });
+    document.getElementById('file-corner').addEventListener('change', e => { const file = e.target.files[0]; if(file) document.getElementById('img-corner').src = URL.createObjectURL(file); });
+    document.getElementById('file-instruction').addEventListener('change', e => { const file = e.target.files[0]; if(file) document.getElementById('img-instruction').src = URL.createObjectURL(file); });
     function exportCard() {
       const card = document.getElementById('card');
       const { offsetWidth: width, offsetHeight: height } = card;
+      const exportScale = 3;
       html2canvas(card, {
-        scale: window.devicePixelRatio || 2,
+        scale: exportScale,
         width: width,
         height: height,
-        useCORS: true
+        useCORS: true,
+        backgroundColor: null
       }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = (document.getElementById('card-title').innerText || 'carta') + '.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
+        canvas.toBlob(blob => {
+          const link = document.createElement('a');
+          link.download = (document.getElementById('card-title').innerText || 'carta') + '.png';
+          link.href = URL.createObjectURL(blob);
+          link.click();
+        }, 'image/png', 1.0);
       });
     }
   </script>
