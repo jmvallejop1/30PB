@@ -1,310 +1,482 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plantilla de Carta - Juego de Mesa</title>
-  <style>
-    :root {
-      --card-width: 350px;
-      --card-height: 550px;
-      --border-radius: 20px;
-      --color-bg: #2E5A79;
-      --color-panel: #1F3C55;
-      --color-light: #F6E3C0;
-      --color-accent: #E38B3E;
-      --font-family: 'Arial', sans-serif;
-      --input-border: #bbb;
-    }
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 20px;
-      font-family: var(--font-family);
-      background: #f0f0f0;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    #main-content {
-      display: flex;
-      width: 100%;
-      max-width: 1200px;
-      gap: 40px;
-    }
-    form#card-form, .card-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      max-width: 50vw;
-      box-sizing: border-box;
-    }
-    form#card-form {
-      background: #fff;
-      padding: 25px;
-      border-radius: var(--border-radius);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      width: 100%;
-      gap: 20px;
-    }
-    .form-group {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-    .form-group label {
-      flex: 0 0 auto;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #333;
-      text-align: right;
-      min-width: 140px;
-    }
-    .form-group input[type="text"],
-    .form-group textarea,
-    .form-group input[type="file"] {
-      flex: 1 1 0;
-      padding: 10px 12px;
-      border: 1px solid var(--input-border);
-      border-radius: 5px;
-      font-size: 1rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      box-sizing: border-box;
-      min-width: 0;
-    }
-    .form-group input[type="file"] {
-      font-size: 0.9rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group input[type="file"]:focus {
-      outline: none;
-      border-color: var(--color-accent);
-      box-shadow: 0 0 0 3px rgba(227,139,62,0.2);
-    }
-    .palette-group {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin: 10px 0;
-    }
-    .palette-item {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      cursor: pointer;
-      transition: border 0.2s;
-    }
-    .palette-item.selected {
-      border-color: #333;
-    }
-    .card-container {
-      gap: 20px;
-    }
-    .card {
-      position: relative;
-      width: var(--card-width);
-      height: var(--card-height);
-      background: var(--color-bg);
-      border-radius: var(--border-radius);
-      overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      border: 8px solid var(--color-light);
-      box-sizing: border-box;
-    }
-    .card-section { padding: 10px; text-align: center; }
-    .card-title, .card-image, .card-phrase { background: var(--color-panel); color: var(--color-light); }
-    .card-title {
-      font-size: 1.4rem;
-      padding: 10px 30px;
-      margin: 0;
-    }
-    .card-image { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 120px; }
-    .card-image img { max-width: 90%; max-height: 100%; border-radius: 10px; object-fit: contain; }
-    .card-phrase { font-style: italic; font-size: 1rem; min-height: 60px; display: flex; align-items: center; justify-content: center; }
-    .card-instructions { background: var(--color-panel); color: var(--color-light); font-size: 0.9rem; display: flex; align-items: center; justify-content: center; padding: 15px; }
-    .card-instructions .text { text-align: center; white-space: normal; word-break: break-word; }
-    .card-instructions .icon { width: 40px; height: 40px; margin-left: 10px; flex-shrink: 0; }
-    .card-instructions .icon img { width: 100%; height: 100%; object-fit: contain; }
-    .card-corner-icon { position: absolute; top: 10px; right: 5px; width: 25px; height: 25px; }
-    .card-corner-icon img { width: 100%; height: 100%; object-fit: contain; }
-    .export-btn { margin-top: 20px; padding: 10px 20px; font-size: 1rem; background: var(--color-accent); color: #fff; border: none; border-radius: 5px; cursor: pointer; transition: background 0.2s; }
-    .export-btn:hover { background: #d97a2a; }
-
-    /* 1) Cambio a columna en móviles
-       2) Labels encima de inputs para que no se rompan */
-    @media (max-width: 768px) {
-      #main-content {
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plantilla de Carta - Juego de Mesa</title>
+    <style>
+      :root {
+        --card-width: 350px;
+        --card-height: 550px;
+        --border-radius: 20px;
+        --color-bg: #2e5a79;
+        --color-panel: #1f3c55;
+        --color-light: #f6e3c0;
+        --color-accent: #e38b3e;
+        --font-family: "Arial", sans-serif;
+        --input-border: #bbb;
+      }
+      body {
+        display: flex;
         flex-direction: column;
-        gap: 20px;
+        align-items: center;
+        margin: 20px;
+        font-family: var(--font-family);
+        background: #f0f0f0;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      #main-content {
+        display: flex;
+        width: 100%;
+        max-width: 1200px;
+        gap: 40px;
       }
       form#card-form,
       .card-container {
-        max-width: 100%;
-        width: 100%;
-      }
-      .card-container {
-        margin-top: 20px;
-      }
-      /* Inputs a 100% */
-      .form-group {
+        flex: 1;
+        display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+        justify-content: center;
+        max-width: 50vw;
+        box-sizing: border-box;
+      }
+      form#card-form {
+        background: #fff;
+        padding: 25px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        gap: 20px;
+      }
+      .form-group {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
       }
       .form-group label {
-        text-align: left;
-        min-width: 0;
-        width: auto;
-        margin-bottom: 5px;
+        flex: 0 0 auto;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+        text-align: right;
+        min-width: 140px;
       }
       .form-group input[type="text"],
       .form-group textarea,
-      .form-group input[type="file"] {
-        width: 100%;
+      .form-group input[type="file"],
+      .form-group select {
+        flex: 1 1 0;
+        padding: 10px 12px;
+        border: 1px solid var(--input-border);
+        border-radius: 5px;
+        font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        box-sizing: border-box;
+        min-width: 0;
+        background: #fff;
+      }
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group input[type="file"]:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: var(--color-accent);
+        box-shadow: 0 0 0 3px rgba(227, 139, 62, 0.2);
+      }
+
+      .card-container {
+        gap: 20px;
       }
       .card {
-        width: 90vw;
-        max-width: var(--card-width);
+        position: relative;
+        width: var(--card-width);
+        height: var(--card-height);
+        background: var(--color-bg);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        border: 8px solid var(--color-light);
+        box-sizing: border-box;
       }
-    }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-</head>
-<body>
-  <h1>Generador de Cartas</h1>
-  <div id="main-content">
-    <form id="card-form">
-      <div class="form-group">
-        <label>Paleta:</label>
-        <div class="palette-group">
-          <div class="palette-item selected" data-value="azul" style="background:#2E5A79" title="Azul"></div>
-          <div class="palette-item" data-value="granate" style="background:#800020" title="Granate"></div>
-          <div class="palette-item" data-value="verde" style="background:#2D5A33" title="Verde"></div>
-          <div class="palette-item" data-value="lila" style="background:#5D3A5A" title="Lila oscuro"></div>
+      .card-section {
+        padding: 10px;
+        text-align: center;
+      }
+      .card-title,
+      .card-image,
+      .card-phrase {
+        background: var(--color-panel);
+        color: var(--color-light);
+      }
+      .card-title {
+        font-size: 1.4rem;
+        padding: 10px 30px;
+        margin: 0;
+      }
+      .card-image {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 120px;
+      }
+      .card-image img {
+        max-width: 90%;
+        max-height: 100%;
+        border-radius: 10px;
+        object-fit: contain;
+      }
+      .card-phrase {
+        font-style: italic;
+        font-size: 1rem;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .card-instructions {
+        background: var(--color-panel);
+        color: var(--color-light);
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+      }
+      .card-instructions .text {
+        text-align: center;
+        white-space: normal;
+        word-break: break-word;
+      }
+      .card-instructions .icon {
+        width: 40px;
+        height: 40px;
+        margin-left: 10px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .card-instructions .icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      .card-corner-icon {
+        position: absolute;
+        top: 10px;
+        right: 5px;
+        width: 25px;
+        height: 25px;
+      }
+      .card-corner-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      .export-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        background: var(--color-accent);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .export-btn:hover {
+        background: #d97a2a;
+      }
+
+      @media (max-width: 768px) {
+        #main-content {
+          flex-direction: column;
+          gap: 20px;
+        }
+        form#card-form,
+        .card-container {
+          max-width: 100%;
+          width: 100%;
+        }
+        .card-container {
+          margin-top: 20px;
+        }
+        .form-group {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .form-group label {
+          text-align: left;
+          width: auto;
+          margin-bottom: 5px;
+        }
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group input[type="file"],
+        .form-group select {
+          width: 100%;
+        }
+        .card {
+          width: 90vw;
+          max-width: var(--card-width);
+        }
+      }
+
+      /* --- Tipos de carta --- */
+      .card.type-especial {
+        --color-light: #d4af37;
+        --color-bg: #fffbf0;
+        --color-panel: #fffae0;
+      }
+      .card.type-habilidad {
+        --color-light: #3a539b;
+        --color-bg: #e8f0ff;
+        --color-panel: #d6e3ff;
+      }
+      .card.type-accion {
+        --color-light: #800020;
+        --color-bg: #fdeef0;
+        --color-panel: #f8dada;
+      }
+      /* Tipo Personaje: paleta Teal */
+      .card.type-personaje {
+        --color-light: #00675b; /* borde oscuro teal */
+        --color-bg: #e0fffa; /* fondo muy suave */
+        --color-panel: #ccfff7; /* panel interior */
+        --color-text: #004c3f; /* texto de alto contraste */
+      }
+      .card.type-categoria-aventuras {
+        --color-light: #2e7d32;
+        --color-bg: #e6ffe6;
+        --color-panel: #ccf7cc;
+        --color-text: #1b5e20;
+      }
+      .card.type-categoria-frikismo {
+        --color-light: #e38b3e;
+        --color-bg: #fff5e6;
+        --color-panel: #ffdab3;
+        --color-text: #a35400;
+      }
+      .card.type-categoria-amistades {
+        --color-light: #5d3a5a;
+        --color-bg: #f3e6ff;
+        --color-panel: #e5ccff;
+        --color-text: #3b1f3b;
+      }
+      .card.type-categoria-general {
+        --color-light: #8c8c8c;
+        --color-bg: #f0f0f0;
+        --color-panel: #d9d9d9;
+        --color-text: #4d4d4d;
+      }
+      .card[class*="type-categoria"] .card-title,
+      .card[class*="type-categoria"] .card-phrase,
+      .card[class*="type-categoria"] .card-instructions {
+        color: var(--color-text);
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  </head>
+  <body>
+    <h1>Generador de Cartas</h1>
+    <div id="main-content">
+      <form id="card-form">
+        <div class="form-group">
+          <label for="title-input">Título:</label>
+          <input type="text" id="title-input" placeholder="Escribe el título" />
         </div>
-      </div>
-      <div class="form-group">
-        <label for="title-input">Título:</label>
-        <input type="text" id="title-input" placeholder="Escribe el título" />
-      </div>
-      <div class="form-group">
-        <label for="phrase-input">Frase:</label>
-        <input type="text" id="phrase-input" placeholder="Escribe la frase" />
-      </div>
-      <div class="form-group">
-        <label for="instructions-input">Instrucciones:</label>
-        <textarea id="instructions-input" rows="3" placeholder="Escribe las instrucciones"></textarea>
-      </div>
-      <div class="form-group">
-        <label for="file-main">Imagen Principal:</label>
-        <input type="file" id="file-main" accept="image/*" />
-      </div>
-      <div class="form-group toggle-group">
-        <input type="checkbox" id="toggle-corner" checked />
-        <label for="toggle-corner">Mostrar icono de esquina</label>
-        <input type="file" id="file-corner" accept="image/*" />
-      </div>
-      <div class="form-group toggle-group">
-        <input type="checkbox" id="toggle-instruction" checked />
-        <label for="toggle-instruction">Mostrar icono de instrucciones</label>
-        <input type="file" id="file-instruction" accept="image/*" />
-      </div>
-    </form>
-    <div class="card-container">
-      <div class="card" id="card">
-        <div class="card-corner-icon" id="corner-icon">
-          <img src="assets/cacahuete.png" alt="Icono Esquina" id="img-corner">
+        <div class="form-group">
+          <label for="phrase-input">Frase:</label>
+          <input type="text" id="phrase-input" placeholder="Escribe la frase" />
         </div>
-        <div class="card-section card-title" id="card-title">Título de la Carta</div>
-        <div class="card-section card-image">
-          <img id="card-img" src="assets/Pablo1.JPG" alt="Imagen Carta">
+        <div class="form-group">
+          <label for="instructions-input">Instrucciones:</label>
+          <textarea
+            id="instructions-input"
+            rows="3"
+            placeholder="Escribe las instrucciones"
+          ></textarea>
         </div>
-        <div class="card-section card-phrase" id="card-phrase">"Frase de la Carta"</div>
-        <div class="card-section card-instructions">
-          <div class="text" id="card-instructions">Instrucciones de la carta</div>
-          <div class="icon" id="instr-icon">
-            <img src="assets/cacahuete.png" alt="Icono Instrucción" id="img-instruction">
+        <div class="form-group">
+          <label for="file-main">Imagen Principal:</label>
+          <input type="file" id="file-main" accept="image/*" />
+        </div>
+        <div class="form-group toggle-group">
+          <input type="checkbox" id="toggle-instruction" checked />
+          <label for="toggle-instruction">Mostrar icono de instrucciones</label>
+          <input type="file" id="file-instruction" accept="image/*" />
+        </div>
+        <div class="form-group">
+          <label for="type-select">Tipo de Carta:</label>
+          <select id="type-select">
+            <option value="categoria">Categoría</option>
+            <option value="especial">Especial</option>
+            <option value="habilidad">Habilidad</option>
+            <option value="accion">Acción</option>
+            <option value="personaje">Personaje</option>
+          </select>
+        </div>
+        <div class="form-group" id="subtype-group" style="display: none">
+          <label for="subtype-select">Subtipo:</label>
+          <select id="subtype-select">
+            <option value="aventuras">Aventuras</option>
+            <option value="frikismo">Frikismo</option>
+            <option value="amistades">Amistades</option>
+            <option value="general">General</option>
+          </select>
+        </div>
+      </form>
+
+      <div class="card-container">
+        <div class="card" id="card">
+          <div class="card-corner-icon">
+            <img
+              src="assets/especial.png"
+              alt="Icono Esquina"
+              id="img-corner"
+            />
+          </div>
+          <div class="card-section card-title" id="card-title">
+            Título de la Carta
+          </div>
+          <div class="card-section card-image">
+            <img id="card-img" src="assets/Pablo1.JPG" alt="Imagen Carta" />
+          </div>
+          <div class="card-section card-phrase" id="card-phrase">
+            "Frase de la Carta"
+          </div>
+          <div class="card-section card-instructions">
+            <div class="text" id="card-instructions">
+              Instrucciones de la carta
+            </div>
+            <div class="icon" id="instr-icon">
+              <img
+                src="assets/cacahuete.png"
+                alt="Icono Instrucción"
+                id="img-instruction"
+              />
+            </div>
           </div>
         </div>
+        <button class="export-btn" onclick="exportCard()">
+          Exportar como PNG
+        </button>
       </div>
-      <button class="export-btn" onclick="exportCard()">Exportar como PNG</button>
     </div>
-  </div>
-  <script>
-    const palettes = {
-      azul:    { bg: '#2E5A79', panel: '#1F3C55', accent: '#E38B3E'  },
-      granate: { bg: '#800020', panel: '#550014', accent: '#C4414F'  },
-      verde:   { bg: '#2D5A33', panel: '#1F3F24', accent: '#8ABF39'  },
-      lila:    { bg: '#5D3A5A', panel: '#442C44', accent: '#A678A1'  }
-    };
-    document.querySelectorAll('.palette-item').forEach(item => {
-      item.addEventListener('click', () => {
-        document.querySelectorAll('.palette-item').forEach(i => i.classList.remove('selected'));
-        item.classList.add('selected');
-        const p = palettes[item.dataset.value];
-        document.documentElement.style.setProperty('--color-bg', p.bg);
-        document.documentElement.style.setProperty('--color-panel', p.panel);
-        document.documentElement.style.setProperty('--color-accent', p.accent);
+
+    <script>
+      // mapping tipo → archivo de icono esquina
+      const cornerIcons = {
+        especial: "especial.png",
+        habilidad: "habilidad.png",
+        accion: "accion.png",
+        personaje: "personaje.png",
+        "categoria-aventuras": "aventuras.png",
+        "categoria-frikismo": "frikismo.png",
+        "categoria-amistades": "amistad.png",
+        "categoria-general": "general.png",
+      };
+
+      // inputs básicos
+      document.getElementById("title-input").addEventListener("input", (e) => {
+        document.getElementById("card-title").innerText =
+          e.target.value || "Título de la Carta";
       });
-    });
-    document.getElementById('title-input').addEventListener('input', e => {
-      document.getElementById('card-title').innerText = e.target.value || 'Título de la Carta';
-    });
-    document.getElementById('phrase-input').addEventListener('input', e => {
-      document.getElementById('card-phrase').innerText = e.target.value ? `"${e.target.value}"` : '"Frase de la Carta"';
-    });
-    document.getElementById('instructions-input').addEventListener('input', e => {
-      document.getElementById('card-instructions').innerText = e.target.value || 'Instrucciones de la carta';
-    });
-    document.getElementById('file-main').addEventListener('change', e => {
-      const file = e.target.files[0];
-      if (file) document.getElementById('card-img').src = URL.createObjectURL(file);
-    });
-    document.getElementById('toggle-corner').addEventListener('change', e => {
-      document.getElementById('corner-icon').style.display = e.target.checked ? 'block' : 'none';
-    });
-    document.getElementById('toggle-instruction').addEventListener('change', e => {
-      document.getElementById('instr-icon').style.display = e.target.checked ? 'flex' : 'none';
-    });
-    document.getElementById('file-corner').addEventListener('change', e => {
-      const file = e.target.files[0];
-      if (file) document.getElementById('img-corner').src = URL.createObjectURL(file);
-    });
-    document.getElementById('file-instruction').addEventListener('change', e => {
-      const file = e.target.files[0];
-      if (file) document.getElementById('img-instruction').src = URL.createObjectURL(file);
-    });
-    function exportCard() {
-      const card = document.getElementById('card');
-      const { offsetWidth: width, offsetHeight: height } = card;
-      const exportScale = 3;
-      html2canvas(card, {
-        scale: exportScale,
-        width: width,
-        height: height,
-        useCORS: true,
-        backgroundColor: null
-      }).then(canvas => {
-        canvas.toBlob(blob => {
-          const link = document.createElement('a');
-          link.download = (document.getElementById('card-title').innerText || 'carta') + '.png';
-          link.href = URL.createObjectURL(blob);
-          link.click();
-        }, 'image/png', 1.0);
+      document.getElementById("phrase-input").addEventListener("input", (e) => {
+        document.getElementById("card-phrase").innerText = e.target.value
+          ? `"${e.target.value}"`
+          : '"Frase de la Carta"';
       });
-    }
-  </script>
-</body>
+      document
+        .getElementById("instructions-input")
+        .addEventListener("input", (e) => {
+          document.getElementById("card-instructions").innerText =
+            e.target.value || "Instrucciones de la carta";
+        });
+      document.getElementById("file-main").addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file)
+          document.getElementById("card-img").src = URL.createObjectURL(file);
+      });
+
+      // selector icono de instrucciones
+      document
+        .getElementById("toggle-instruction")
+        .addEventListener("change", (e) => {
+          document.getElementById("instr-icon").style.display = e.target.checked
+            ? "flex"
+            : "none";
+        });
+      document
+        .getElementById("file-instruction")
+        .addEventListener("change", (e) => {
+          const file = e.target.files[0];
+          if (file)
+            document.getElementById("img-instruction").src =
+              URL.createObjectURL(file);
+        });
+
+      // tipo/subtipo y corner icon
+      const typeSelect = document.getElementById("type-select");
+      const subtypeGroup = document.getElementById("subtype-group");
+      const subtypeSelect = document.getElementById("subtype-select");
+      const cardEl = document.getElementById("card");
+      const cornerImg = document.getElementById("img-corner");
+
+      function updateCardType() {
+        if (typeSelect.value === "categoria") {
+          subtypeGroup.style.display = "flex";
+        } else {
+          subtypeGroup.style.display = "none";
+        }
+        let key = typeSelect.value;
+        if (key === "categoria") key += "-" + subtypeSelect.value;
+        // actualizar clase
+        cardEl.classList.forEach((c) => {
+          if (c.startsWith("type-")) cardEl.classList.remove(c);
+        });
+        cardEl.classList.add("type-" + key);
+        // actualizar icono
+        cornerImg.src = `assets/${cornerIcons[key] || "especial.png"}`;
+      }
+
+      typeSelect.addEventListener("change", updateCardType);
+      subtypeSelect.addEventListener("change", updateCardType);
+      updateCardType();
+
+      // exportar como PNG
+      function exportCard() {
+        const card = document.getElementById("card");
+        html2canvas(card, {
+          scale: 3,
+          width: card.offsetWidth,
+          height: card.offsetHeight,
+          useCORS: true,
+          backgroundColor: null,
+        }).then((canvas) => {
+          canvas.toBlob(
+            (blob) => {
+              const link = document.createElement("a");
+              link.download =
+                (document.getElementById("card-title").innerText || "carta") +
+                ".png";
+              link.href = URL.createObjectURL(blob);
+              link.click();
+            },
+            "image/png",
+            1.0
+          );
+        });
+      }
+    </script>
+  </body>
 </html>
