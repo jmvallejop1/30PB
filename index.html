@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Winky+Rough&display=swap" rel="stylesheet" />
     <title>Plantilla de Carta - Juego de Mesa</title>
     <style>
       :root {
@@ -15,6 +16,8 @@
         --color-accent: #e38b3e;
         --font-family: "Arial", sans-serif;
         --input-border: #bbb;
+        --font-title: 'Bungee', cursive;
+        --font-text: 'Winky Rough', cursive;
       }
       body {
         display: flex;
@@ -115,12 +118,15 @@
       .card-phrase {
         background: var(--color-panel);
         color: var(--color-light);
+        
+
       }
       .card-title {
         font-size: 1.4rem;
         font-weight: bold;
         padding: 10px 30px;
         margin: 0;
+        font-family: var(--font-title);
       }
       .card-image {
         flex: 1;
@@ -143,6 +149,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        font-family: var(--font-text);
       }
       .card-instructions {
         background: var(--color-panel);
@@ -152,6 +159,7 @@
         align-items: center;
         justify-content: center;
         padding: 15px;
+        font-family: var(--font-text);
       }
       .card-instructions .text {
         text-align: center;
